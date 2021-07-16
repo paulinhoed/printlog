@@ -1,0 +1,3 @@
+include ':printloglibrary'
+include ':app'
+rootProject.name = "PrintLog"

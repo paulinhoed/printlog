@@ -4,16 +4,19 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_3
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_4
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_END
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_START
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.BLANK_SPACE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BREAKLINE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.EMPTY
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.END
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.HASHTAG
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.INIT
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.NULL
-import com.paulo.android.printloglibrary.constants.PrintLogConstants.SEMICOLON
 import com.paulo.android.printloglibrary.extensions.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
+class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, private val timeStart: Calendar?) {
 
     internal fun processBlock(text: String, option: Int): Any {
         var newBase = ""
@@ -22,7 +25,10 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
         var blockBase = ""
         when (option) {
             0 -> blockBase = buildHeaderAndFooterBlock(INIT, text, subLevelCounter)
-            1 -> blockBase = buildHeaderAndFooterBlock(END, text, subLevelCounter)
+            1 -> {
+                blockBase = buildHeaderAndFooterBlock(END, text, subLevelCounter)
+                blockBase = buildElapsedTime(blockBase, processTime())
+            }
         }
         newBase = buildNewBase(blockBase, maxLength)
         val bases: Map<String, String> = processBase(newBase)
@@ -74,7 +80,7 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
      ${subTexts[i]}
 
      """.trimIndent()
-                } else subTexts[i]
+                } else HASHTAG + BLANK_SPACE + subTexts[i]
             }
             newText
         }
@@ -83,11 +89,6 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
     internal fun processValue(value: Any?): Any? {
         val maxLength = maxLengthBlock - 5
         var thisValue = value
-        val thisClass = value?.javaClass
-        val thisClassName = value?.javaClass?.simpleName
-//        log("||===========================||")
-//        log("||thisClassName-> $thisClassName")
-//        log("||===========================||")
 
         if (value == null)
             thisValue = NULL
@@ -97,11 +98,6 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
             } else if (value.javaClass == Array<String>::class.java) {
                 val list = value as Array<*>
                 if (list.isEmpty()) thisValue = EMPTY else {
-//                    var newVal = ""
-//                    for (v in list) {
-//                        newVal += BREAKLINE + v + SEMICOLON
-//                    }
-//                    thisValue = newVal
                     var builder = buildHeaderStructureList(maxLength)
                     for ((index, v) in value.withIndex()) {
                         builder = buildLists(v, builder, index)
@@ -112,11 +108,6 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
             } else if (value.javaClass == Array<Long>::class.java) {
                 val list = value as Array<*>
                 if (list.isEmpty()) thisValue = EMPTY else {
-//                    var newVal = ""
-//                    for (v in list) {
-//                        newVal += BREAKLINE + v + SEMICOLON
-//                    }
-//                    thisValue = newVal
                     var builder = buildHeaderStructureList(maxLength)
                     for ((index, v) in value.withIndex()) {
                         builder = buildLists(v, builder, index)
@@ -135,19 +126,10 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
                 }
             } else if (value.javaClass == HashMap::class.java) {
                 if ((value as Map<*, *>).isEmpty()) thisValue = EMPTY else {
-//                    var newVal = ""
-//                    for ((key, _value) in value as HashMap<*, *>) {
-//                        val brk = BREAKLINE
-//                        val smc = SEMICOLON
-//                        newVal += "$brk$key = $_value$smc"
-//                    }
-//                    thisValue = newVal
                     var builder = buildHeaderStructureList(maxLength)
-                    for ((key, _value) in value as HashMap<*, *>) {
-                        val brk = BREAKLINE
-                        val smc = SEMICOLON
-                        val newVal = "$brk$key = $_value$smc"
-                        builder = buildLists(newVal, builder, 0)
+                    for ((_key, _value) in value as HashMap<*, *>) {
+                        val newVal = "$_key = $_value"
+                        builder = buildLists(newVal, builder, -1)
                     }
                     builder = buildFooterStructureList(maxLength, builder)
                     thisValue = builder.toString()
@@ -157,21 +139,21 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int) {
         return thisValue
     }
 
-    private fun processTime() {
-        //        val timeFinal = Calendar.getInstance()
-//        return if (timeStart != null) {
-//            val diff = timeFinal.time.time - timeStart!!.time.time
+    private fun processTime(): String {
+        val timeFinal = Calendar.getInstance()
+        return if (timeStart != null) {
+            val diff = timeFinal.time.time - timeStart!!.time.time
 //            val diffDays = (diff / (24 * 60 * 60 * 1000)).toInt()
-//            val diffHour = (diff / (60 * 60 * 1000)).toInt()
-//            val diffMin = (diff / (60 * 1000)).toInt()
-//            val diffSec = (diff / 1000).toInt()
-//            var hours = ""
-//            var mins = ""
-//            var secs = ""
-//            if (diffHour in 0..9) hours += "0$diffHour" else hours += diffHour
-//            if (diffMin in 0..9) mins += "0$diffMin" else mins += diffMin
-//            if (diffSec in 0..9) secs += "0$diffSec" else secs += diffSec
-//            "Time:[" + diffDays + " days & " + hours + "h:" + mins + "m:" + secs + "ms]"
-//        } else ""
+            val diffHour = (diff / (60 * 60 * 1000)).toInt()
+            val diffMin = (diff / (60 * 1000)).toInt()
+            val diffSec = (diff / 1000).toInt()
+            var hours = ""
+            var mins = ""
+            var secs = ""
+            if (diffHour in 0..9) hours += "0$diffHour" else hours += diffHour
+            if (diffMin in 0..9) mins += "0$diffMin" else mins += diffMin
+            if (diffSec in 0..9) secs += "0$diffSec" else secs += diffSec
+            buildTimeBlock(hours, mins, secs)
+        } else ""
     }
 }

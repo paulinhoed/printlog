@@ -9,6 +9,7 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.NOTHING
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.ONLY_MSG
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.ONLY_VAL
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.SEPARATOR
+import com.paulo.android.printloglibrary.extensions.getTime
 import com.paulo.android.printloglibrary.input.Input
 import com.paulo.android.printloglibrary.interfaces.PrintLogInterface
 import java.util.*
@@ -55,20 +56,21 @@ class PrintLog: PrintLogInterface {
 
     init {
         subLevelCounter++
+        timeStart = Calendar.getInstance()
     }
 
     constructor(print: Boolean, title: String) {
         this.print = print
         this.title = title
         this.maxLengthBlock = 100
-        input = Input(print, title, subLevelCounter)
+        input = Input(print, title, subLevelCounter, timeStart)
     }
 
     constructor(print: Boolean, title: String, maxLengthBlock: Int) {
         this.print = print
         this.title = title
         this.maxLengthBlock = maxLengthBlock
-        input = Input(print, title, subLevelCounter, maxLengthBlock)
+        input = Input(print, title, subLevelCounter, maxLengthBlock, timeStart)
     }
 
     override fun header() {
@@ -104,11 +106,11 @@ class PrintLog: PrintLogInterface {
     }
 
     override fun help() {
-        TODO("Not yet implemented")
+        Samples().help()
     }
 
     override fun sample1() {
-        TODO("Not yet implemented")
+        Samples().sample1()
     }
 
 }

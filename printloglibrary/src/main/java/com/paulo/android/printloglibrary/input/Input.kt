@@ -11,7 +11,9 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.SEPARATOR
 import com.paulo.android.printloglibrary.extensions.buildLogText
 import com.paulo.android.printloglibrary.extensions.getLine
 import com.paulo.android.printloglibrary.extensions.getTime
+import com.paulo.android.printloglibrary.extensions.getTitleFormatted
 import com.paulo.android.printloglibrary.gear.Gear
+import java.util.*
 
 class Input {
     private val print: Boolean
@@ -19,16 +21,16 @@ class Input {
 
     private var gear: Gear? = null
 
-    constructor(print: Boolean, title: String, subLevelCounter: Int) {
+    constructor(print: Boolean, title: String, subLevelCounter: Int, timeStart: Calendar?) {
         this.print = print
-        this.title = title
-        this.gear = Gear(100, subLevelCounter)
+        this.title = getTitleFormatted(title, 100)
+        this.gear = Gear(100, subLevelCounter, timeStart)
     }
 
-    constructor(print: Boolean, title: String, subLevelCounter: Int, maxLengthBlock: Int) {
+    constructor(print: Boolean, title: String, subLevelCounter: Int, maxLengthBlock: Int, timeStart: Calendar?) {
         this.print = print
-        this.title = title
-        this.gear = Gear(maxLengthBlock, subLevelCounter)
+        this.title = getTitleFormatted(title, maxLengthBlock)
+        this.gear = Gear(maxLengthBlock, subLevelCounter, timeStart)
     }
 
     fun drawExtras(option: String) {

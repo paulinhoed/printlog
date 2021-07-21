@@ -14,8 +14,8 @@ interface PrintLogInterface {
      * Loggers
      */
     fun log(value: Any?)
-    fun log(msg: String)
-    fun log(msg: String, value: Any?)
+    fun log(message: String)
+    fun log(message: String, value: Any?)
 
     /**
      * Samples & Helpers

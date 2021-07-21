@@ -23,37 +23,57 @@ class PrintLogUnitTest {
     val s18 = "Donec dapibus nisl suscipit mauris mattis, non laoreet nulla viverra."
 
     var list: ArrayList<String> = ArrayList()
+    var map: HashMap<String, Any> = HashMap()
+//    @Test
+//    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called`() {
+//        list.add(s01)
+//        list.add(s02)
+//        list.add(s03)
+//        list.add(s04)
+//        list.add(s05)
+//        list.add(s06)
+//        list.add(s07)
+//        list.add(s08)
+//        list.add(s09)
+//        list.add(s10)
+//        list.add(s11)
+//        list.add(s12)
+//        list.add(s13)
+//        list.add(s14)
+//        list.add(s15)
+//        list.add(s16)
+//        list.add(s17)
+//        list.add(s18)
+//
+//        map.put("s01",10)
+//        map.put("s02",s02)
+//        map.put("s03",0.1f)
+//
+//        val p = PrintLog(true, "Main Test")
+//        p.header()
+//        p.log("test only message")
+//        p.separator()
+//        p.log(null)
+//        p.log("message with value",10)
+//        p.log("message with empty value","")
+//        p.divider()
+//        p.log("message with another value",0.001f)
+//        p.separator()
+//        p.log("the listeeeee",list)
+//        p.breakLine()
+//        p.log("the mappppppp",map)
+//        p.footer()
+//    }
+
+//    @Test
+//    fun `Sample1_test`() {
+//        val p = PrintLog(true, "CHANGE_TITLE")
+//        p.help()
+//    }
+
     @Test
     fun `GIVEN this_test MUST be_this_thing WHEN something_is_called`() {
-        list.add(s01)
-        list.add(s02)
-        list.add(s03)
-        list.add(s04)
-        list.add(s05)
-        list.add(s06)
-        list.add(s07)
-        list.add(s08)
-        list.add(s09)
-        list.add(s10)
-        list.add(s11)
-        list.add(s12)
-        list.add(s13)
-        list.add(s14)
-        list.add(s15)
-        list.add(s16)
-        list.add(s17)
-        list.add(s18)
-        val p = PrintLog(true, "Main Test")
-        p.header()
-        p.log("test only message")
-        p.separator()
-        p.log(null)
-        p.log("message with value",10)
-        p.log("message with empty value","")
-        p.divider()
-        p.log("message with another value",0.001f)
-        p.separator()
-        p.log("the listeeeee",list)
-        p.footer()
+        val p = PrintLog(true, "CHANGE_TITLE")
+        p.sample1()
     }
 }

@@ -21,7 +21,7 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, pr
     internal fun processBlock(text: String, option: Int): Any {
         var newBase = ""
         var block = ""
-        val maxLength = maxLengthBlock
+        val maxLength = processLimit(text, maxLengthBlock)
         var blockBase = ""
         when (option) {
             0 -> blockBase = buildHeaderAndFooterBlock(INIT, text, subLevelCounter)
@@ -155,5 +155,12 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, pr
             if (diffSec in 0..9) secs += "0$diffSec" else secs += diffSec
             buildTimeBlock(hours, mins, secs)
         } else ""
+    }
+
+    private fun processLimit(text: String, maxLimit: Int): Int {
+        val textSize = text.length
+        return if (maxLimit < textSize )
+            textSize
+        else maxLimit
     }
 }

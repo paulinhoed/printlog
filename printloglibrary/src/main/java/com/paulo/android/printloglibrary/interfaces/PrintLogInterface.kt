@@ -8,6 +8,7 @@ interface PrintLogInterface {
     fun footer()
     fun divider()
     fun separator()
+    fun session()
     fun breakLine()
 
     /**

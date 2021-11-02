@@ -6,8 +6,9 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_1
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_3
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_4
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BLANK_SPACE
-import com.paulo.android.printloglibrary.constants.PrintLogConstants.BREAKLINE
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.BREAK_LINE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.CLOSE_KEYS
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.CLOSE_PARENTHESIS
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.CURSOR
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.DOUBLE_DOTS
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.ELAPSED_TIME
@@ -20,8 +21,10 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.LINE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.LOG
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.MINUTES
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.OPEN_KEYS
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.OPEN_PARENTHESIS
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.POINTER
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.SECONDS
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.SESSION_INTERVAL
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,6 +39,13 @@ fun getTitleFormatted(title: String, maxLength: Int): String {
 
 fun getLine(): Int {
     return Throwable().stackTrace[4].lineNumber
+}
+
+fun normalizeMaxLength(maxLength: Int): Int {
+    return if (maxLength < 100)
+        100
+    else
+        maxLength
 }
 
 @SuppressLint("SimpleDateFormat")
@@ -72,13 +82,14 @@ fun buildLogText(time: String, line: Int, title: String, message: Any?): String 
 }
 
 fun buildHeaderAndFooterBlock(type: String, text: String, subLevelCounter: Int): String {
-    var counter = ""
-    counter = when {
+    val counter = when {
         subLevelCounter < 10 -> "00$subLevelCounter"
         subLevelCounter in 10..99 -> "0$subLevelCounter"
         else -> subLevelCounter.toString()
     }
-    return " ($counter)$type [$text] "
+    return OPEN_PARENTHESIS + counter +
+            CLOSE_PARENTHESIS + type +
+            OPEN_KEYS + text + CLOSE_KEYS
 }
 
 fun buildNewBase(blockBaseContent: String, maxLength: Int): String {
@@ -87,12 +98,12 @@ fun buildNewBase(blockBaseContent: String, maxLength: Int): String {
     val base = DOUBLE_DOTS
     var newBase = ""
     var startBlockBaseLength = blockBase.length
-    println("# --- buildNewBase --- #")
-    println("# blockBase:$blockBase")
-    println("# limit:$limit")
-    println("# startBlockBaseLength:$startBlockBaseLength")
-    println("# maxLength:$maxLength")
-    println("# --- ~.~ --- #")
+//    println("# --- buildNewBase --- #")
+//    println("# blockBase:$blockBase")
+//    println("# limit:$limit")
+//    println("# startBlockBaseLength:$startBlockBaseLength")
+//    println("# maxLength:$maxLength")
+//    println("# --- ~.~ --- #")
     if (startBlockBaseLength >= maxLength) {
             blockBase = blockBase.substring(0, limit)
             startBlockBaseLength = blockBase.length
@@ -107,8 +118,7 @@ fun buildNewBase(blockBaseContent: String, maxLength: Int): String {
 }
 
 fun buildLists(value: Any?, builder: StringBuilder, i: Int): StringBuilder{
-    var index = ""
-    index = when (i) {
+    val index = when (i) {
         in 0..9 -> "00$i"
         in 10..99 -> "0$i"
         in 100..999 -> "$i"
@@ -136,13 +146,13 @@ fun buildLists(value: Any?, builder: StringBuilder, i: Int): StringBuilder{
         builder.append(CLOSE_KEYS)
     }
     builder.append(BLANK_SPACE)
-    builder.append(BREAKLINE)
+    builder.append(BREAK_LINE)
     return builder
 }
 
 fun buildHeaderStructureList(maxLength: Int): StringBuilder {
     val builder = StringBuilder()
-    builder.append(BREAKLINE)
+    builder.append(BREAK_LINE)
     builder.append(HASHTAG)
     builder.append(BLANK_SPACE)
     builder.append(BLANK_SPACE)
@@ -150,7 +160,7 @@ fun buildHeaderStructureList(maxLength: Int): StringBuilder {
     for(i in 0..maxLength)
         builder.append(BASE_3)
     builder.append(BASE_1)
-    builder.append(BREAKLINE)
+    builder.append(BREAK_LINE)
     return builder
 }
 

@@ -74,65 +74,16 @@ class PrintLogUnitTest {
 
     @Test
     fun `GIVEN this_test MUST be_this_thing WHEN something_is_called`() {
-        val p = PrintLog(true, "CHANGE_TITLE")
-        p.header()
-        p.footer()
-    }
+        for (i in -3..3) {
+            val p = PrintLog(true, "Test i[$i]")
+            p.header()
+            p.log("GIVEN this_test MUST be_this_thing WHEN something_is_called")
+            p.footer()
+        }
+        val pp = PrintLog(true, "Test Session", 99)
+        pp.session()
 
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_calledNeg`() {
-        val p = PrintLog(true, "CHANGE_TITLE", -1)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called0`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 0)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called1`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 1)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called2`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 2)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called9`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 9)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called99`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 99)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called10`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 10)
-        p.header()
-        p.footer()
-    }
-
-    @Test
-    fun `GIVEN this_test MUST be_this_thing WHEN something_is_called100`() {
-        val p = PrintLog(true, "CHANGE_TITLE", 100)
-        p.header()
-        p.footer()
+        
     }
 
 

@@ -32,7 +32,7 @@ object PrintLogConstants {
     internal const val BALL = "*"
     internal const val DOUBLE_DOTS = ":"
     internal const val SEMICOLON = ";"
-    internal const val BREAKLINE = "\n"
+    internal const val BREAK_LINE = "\n"
     internal const val NULL = "[NULL]"
     internal const val EMPTY = "[EMPTY]"
     internal const val FULL_DATA_FORMAT = "dd/MM/yyyy HH:mm:ss"

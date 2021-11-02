@@ -87,9 +87,15 @@ fun buildNewBase(blockBaseContent: String, maxLength: Int): String {
     val base = DOUBLE_DOTS
     var newBase = ""
     var startBlockBaseLength = blockBase.length
+    println("# --- buildNewBase --- #")
+    println("# blockBase:$blockBase")
+    println("# limit:$limit")
+    println("# startBlockBaseLength:$startBlockBaseLength")
+    println("# maxLength:$maxLength")
+    println("# --- ~.~ --- #")
     if (startBlockBaseLength >= maxLength) {
-        blockBase = blockBase.substring(0, limit)
-        startBlockBaseLength = blockBase.length
+            blockBase = blockBase.substring(0, limit)
+            startBlockBaseLength = blockBase.length
     }
     val diffStart = maxLength - startBlockBaseLength
     var i = 0

@@ -12,6 +12,7 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.SEPARATOR
 import com.paulo.android.printloglibrary.extensions.getTime
 import com.paulo.android.printloglibrary.input.Input
 import com.paulo.android.printloglibrary.interfaces.PrintLogInterface
+import org.koin.androidx.compose.inject
 import java.util.*
 
 

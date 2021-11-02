@@ -1,11 +1,11 @@
-package com.paulo.android.printloglibrary.gear
+package com.paulo.android.printloglibrary.core
 
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_3
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_4
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_END
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BASE_START
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BLANK_SPACE
-import com.paulo.android.printloglibrary.constants.PrintLogConstants.BREAKLINE
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.BREAK_LINE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.EMPTY
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.END
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.HASHTAG
@@ -16,24 +16,21 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, private val timeStart: Calendar?) {
+class ProcessCore(private val maxLengthBlock: Int, private var subLevelCounter: Int, private val timeStart: Calendar?) {
 
     internal fun processBlock(text: String, option: Int): Any {
-        var newBase = ""
-        var block = ""
         val maxLength = processLimit(text, maxLengthBlock)
         var blockBase = ""
         when (option) {
-            0 -> blockBase = buildHeaderAndFooterBlock(INIT, text, subLevelCounter)
+            0 -> blockBase = buildHeaderAndFooterBlock(INIT, processText(text), subLevelCounter)
             1 -> {
-                blockBase = buildHeaderAndFooterBlock(END, text, subLevelCounter)
+                blockBase = buildHeaderAndFooterBlock(END, processText(text), subLevelCounter)
                 blockBase = buildElapsedTime(blockBase, processTime())
             }
         }
-        newBase = buildNewBase(blockBase, maxLength)
+        val newBase = buildNewBase(blockBase, maxLength)
         val bases: Map<String, String> = processBase(newBase)
-        block = HASHTAG + bases[BASE_START] + blockBase + bases[BASE_END] + HASHTAG
-        return block
+        return HASHTAG + bases[BASE_START] + blockBase + bases[BASE_END] + HASHTAG
     }
 
     internal fun processLineBlock(option: Int): Any {
@@ -52,7 +49,7 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, pr
     }
 
     internal fun processBlankLine(): String {
-        return HASHTAG + BREAKLINE
+        return HASHTAG + BREAK_LINE
     }
 
     private fun processBase(base: String): Map<String, String> {
@@ -65,6 +62,13 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, pr
         bases[BASE_START] = startBase
         bases[BASE_END] = endBase
         return bases
+    }
+    
+    private fun processText(text: String): String {
+        /**
+         * Not implemented yet!!!
+         */
+        return text
     }
 
     internal fun processFinalText(text: String): String {
@@ -139,10 +143,10 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, pr
         return thisValue
     }
 
-    private fun processTime(): String {
+    internal fun processTime(): String {
         val timeFinal = Calendar.getInstance()
         return if (timeStart != null) {
-            val diff = timeFinal.time.time - timeStart!!.time.time
+            val diff = timeFinal.time.time - timeStart.time.time
 //            val diffDays = (diff / (24 * 60 * 60 * 1000)).toInt()
             val diffHour = (diff / (60 * 60 * 1000)).toInt()
             val diffMin = (diff / (60 * 1000)).toInt()
@@ -157,10 +161,15 @@ class Gear(private val maxLengthBlock: Int, private var subLevelCounter: Int, pr
         } else ""
     }
 
-    private fun processLimit(text: String, maxLimit: Int): Int {
+    internal fun processLimit(text: String, maxLimit: Int): Int {
         val textSize = text.length
         return if (maxLimit < textSize )
             textSize
-        else maxLimit
+//        else if (){
+//            maxLimit
+//        }
+        else {
+            maxLimit
+        }
     }
 }

@@ -9,9 +9,11 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.NOTHING
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.ONLY_MSG
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.ONLY_VAL
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.SEPARATOR
-import com.paulo.android.printloglibrary.extensions.getTime
-import com.paulo.android.printloglibrary.input.Input
+import com.paulo.android.printloglibrary.extensions.normalizeMaxLength
+//import com.paulo.android.printloglibrary.extensions.getTime
+//import com.paulo.android.printloglibrary.printer.Printer
 import com.paulo.android.printloglibrary.interfaces.PrintLogInterface
+import com.paulo.android.printloglibrary.utils.Printer
 import org.koin.androidx.compose.inject
 import java.util.*
 
@@ -49,7 +51,7 @@ class PrintLog: PrintLogInterface {
     private var maxLengthBlock: Int
     private var timeStart: Calendar? = null
 
-    private var input: Input
+    private var printer: Printer
 
     companion object {
         var subLevelCounter: Int = 0
@@ -64,46 +66,46 @@ class PrintLog: PrintLogInterface {
         this.print = print
         this.title = title
         this.maxLengthBlock = 100
-        input = Input(print, title, subLevelCounter, timeStart)
+        printer = Printer(print, title, subLevelCounter, timeStart)
     }
 
     constructor(print: Boolean, title: String, maxLengthBlock: Int) {
         this.print = print
         this.title = title
-        this.maxLengthBlock = maxLengthBlock
-        input = Input(print, title, subLevelCounter, maxLengthBlock, timeStart)
+        this.maxLengthBlock = normalizeMaxLength(maxLengthBlock)
+        printer = Printer(print, title, subLevelCounter, maxLengthBlock, timeStart)
     }
 
     override fun header() {
-        input.drawExtras(HEADER)
+        printer.drawExtrasBordersAndStuff(HEADER)
     }
 
     override fun footer() {
-        input.drawExtras(FOOTER)
+        printer.drawExtrasBordersAndStuff(FOOTER)
     }
 
     override fun divider() {
-        input.drawExtras(DIVIDER)
+        printer.drawExtrasBordersAndStuff(DIVIDER)
     }
 
     override fun separator() {
-        input.drawExtras(SEPARATOR)
+        printer.drawExtrasBordersAndStuff(SEPARATOR)
     }
 
     override fun breakLine() {
-        input.drawExtras(JUMP_LINE)
+        printer.drawExtrasBordersAndStuff(JUMP_LINE)
     }
 
     override fun log(value: Any?) {
-        input.printLogs(ONLY_VAL, NOTHING, value)
+        printer.writeLogs(ONLY_VAL, NOTHING, value)
     }
 
     override fun log(message: String) {
-        input.printLogs(ONLY_MSG, message, null)
+        printer.writeLogs(ONLY_MSG, message, null)
     }
 
     override fun log(message: String, value: Any?) {
-        input.printLogs(BOTH_MSG_VAL, message, value)
+        printer.writeLogs(BOTH_MSG_VAL, message, value)
     }
 
     override fun help() {

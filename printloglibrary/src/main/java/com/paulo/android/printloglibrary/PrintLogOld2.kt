@@ -1,12 +1,15 @@
 package com.paulo.android.printloglibrary
 
 import com.paulo.android.printloglibrary.core.MainProcess
+import com.paulo.android.printloglibrary.di.printModules
 import com.paulo.android.printloglibrary.extensions.normalizeMaxLength
 import com.paulo.android.printloglibrary.factory.PrintLogFactory
 import com.paulo.android.printloglibrary.factory.PrintLogFactoryImpl
 import com.paulo.android.printloglibrary.model.PrintLogConfigModel
 import com.paulo.android.printloglibrary.utils.PrinterUtils
 import com.paulo.android.printloglibrary.utils.PrinterUtilsImpl
+import org.koin.androidx.compose.inject
+import org.koin.core.context.GlobalContext.startKoin
 import java.util.*
 
 /**
@@ -36,37 +39,65 @@ import java.util.*
  *
  *
  */
-class PrintLog: PrintLogFactory {
+class PrintLogOld2(
+    private val toPrint: Boolean,
+    private val title: String,
+    lengthBlock: Int = 100,
+) : PrintLogFactory {
     private var timeStart: Long = 0
-    private var maxLengthBlock: Int = 0
+    private var maxLengthBlock: Int = lengthBlock
     private lateinit var configModel: PrintLogConfigModel
 
     private lateinit var gear: MainProcess
-    private lateinit var printerUtils: PrinterUtils
-    private lateinit var printLogFactory: PrintLogFactory
+
+
+//    private val gear: MainProcess by inject(MainProcess::class.java)
+//
+    private var printerUtils: PrinterUtils
+//    private val printerUtils: PrinterUtils by inject(PrinterUtils::class.java)
+//
+    private val printLogFactory: PrintLogFactory
+//    private val printLogFactory: PrintLogFactory by inject(PrintLogFactory::class.java)
+//
+////    private var gear: MainProcess
+//    private val gear: MainProcess by inject(MainProcess::class.java)
 
     companion object {
         var index: Int = 0
     }
 
-    operator fun invoke(
-        toPrint: Boolean,
-        title: String,
-        lengthBlock: Int = 100
-    ) {
+    init {
+        startKoin {
+            printModules
+        }
+        setup(lengthBlock)
+//        index++
+//        this.maxLengthBlock = normalizeMaxLength(lengthBlock)
+//        this.timeStart = Calendar.getInstance().timeInMillis
+
+        configModel = PrintLogConfigModel(toPrint, title, index, maxLengthBlock, timeStart)
+
+        gear = MainProcess(configModel)
+
+
+//        printerUtils = PrinterUtils(configModel, gear)
+        printerUtils = PrinterUtilsImpl(configModel, gear)
+
+//        printLogFactory = PrintLogFactory(printerUtils)
+        printLogFactory = PrintLogFactoryImpl(printerUtils)
+    }
+
+    private fun setup(lengthBlock: Int) {
         index++
         timeStart = Calendar.getInstance().timeInMillis
         maxLengthBlock = normalizeMaxLength(lengthBlock)
         configModel = PrintLogConfigModel(toPrint, title, index, maxLengthBlock, timeStart)
 
-        setup(toPrint, title)
-    }
-
-    private fun setup(toPrint: Boolean, title: String) {
-        configModel = PrintLogConfigModel(toPrint, title, index, maxLengthBlock, timeStart)
-        gear = MainProcess(configModel)
-        printerUtils = PrinterUtilsImpl(configModel, gear)
-        printLogFactory = PrintLogFactoryImpl(printerUtils)
+        //
+//        printerUtils
+//        printerUtils = PrinterUtils(configModel = configModel, gear = gear)
+//        printLogFactory = PrintLogFactory(printerUtils)
+//        printLogFactory = PrintLogFactory(printerUtils)
     }
 
     override fun breakLine() {
@@ -121,4 +152,10 @@ class PrintLog: PrintLogFactory {
         printLogFactory.sample1()
     }
 
+}
+
+fun main() {
+    startKoin {
+        modules(printModules)
+    }
 }

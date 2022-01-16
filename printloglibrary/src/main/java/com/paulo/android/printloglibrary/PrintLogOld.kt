@@ -40,11 +40,11 @@ package com.paulo.android.printloglibrary
 //    private var timeStart: Calendar? = null
 //
 //    companion object {
-//        var subLevelCounter: Int = 0
+//        var index: Int = 0
 //    }
 //
 //    init {
-//        subLevelCounter++
+//        index++
 //    }
 //
 //    constructor(print: Boolean, title: String) {
@@ -265,18 +265,18 @@ package com.paulo.android.printloglibrary
 //        var newBase = ""
 //        var block = ""
 //        val hashtag = "#"
-//        val maxLength = maxLengthBlock
+//        val blockLength = maxLengthBlock
 //        val limit = maxLengthBlock - 2
 //        var bases: Map<String, String> = HashMap()
 //        when (option) {
 //            0 -> {
-//                var startBlockBase = " ($subLevelCounter)INIT [$text] "
+//                var startBlockBase = " ($index)INIT [$text] "
 //                var startBlockBaseLength = startBlockBase.length
-//                if (startBlockBaseLength >= maxLength) {
+//                if (startBlockBaseLength >= blockLength) {
 //                    startBlockBase = startBlockBase.substring(0, limit)
 //                    startBlockBaseLength = startBlockBase.length
 //                }
-//                val diffStart = maxLength - startBlockBaseLength
+//                val diffStart = blockLength - startBlockBaseLength
 //                var i = 0
 //                while (i < diffStart) {
 //                    newBase += base
@@ -286,13 +286,13 @@ package com.paulo.android.printloglibrary
 //                block = hashtag + bases["start"] + startBlockBase + bases["end"] + hashtag
 //            }
 //            1 -> {
-//                var endBlockBase = " ($subLevelCounter)END [" + text + "]-" + tt()
+//                var endBlockBase = " ($index)END [" + text + "]-" + tt()
 //                var endBlockBaseLength = endBlockBase.length
-//                if (endBlockBaseLength >= maxLength) {
+//                if (endBlockBaseLength >= blockLength) {
 //                    endBlockBase = endBlockBase.substring(0, limit)
 //                    endBlockBaseLength = endBlockBase.length
 //                }
-//                val diffEnd = maxLength - endBlockBaseLength
+//                val diffEnd = blockLength - endBlockBaseLength
 //                var i = 0
 //                while (i < diffEnd) {
 //                    newBase += base

@@ -1,5 +1,5 @@
 package com.paulo.android.printloglibrary
-//
+
 //import com.paulo.android.printloglibrary.mock.Mocks
 //import com.paulo.android.printloglibrary.model.GenericObjectModel
 //import org.junit.Test

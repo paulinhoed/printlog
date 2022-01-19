@@ -1,5 +1,6 @@
 package com.paulo.android.printloglibrary.core
 
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.BLANK_SPACE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.BREAK_LINE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.EMPTY
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.NULL
@@ -145,6 +146,7 @@ class ProcessValue(
             var builder = StringBuilder()
 //            builder.append(BREAK_LINE)
             builder.append(MAIN_BASE)
+//            builder.append(BREAK_LINE)
             builder = buildSessionStructureList(maxLength, null)
             when (memberProperties) {
                 null -> {
@@ -197,24 +199,50 @@ class ProcessValue(
         finalValue = builder.toString()
     }
 
+//    private fun createGenericMapCollection(valueMap: Pair<Any?, ValueTypes>, maxLength: Int) {
+//        val value = valueMap.first
+//        val type = valueMap.second.name
+//        var builder = StringBuilder()
+//        if (type != COLLECTION_WITH_GENERIC_TYPE.name) {
+//            builder.append(BREAK_LINE)
+//            builder = buildSessionStructureList(maxLength, null)
+//        }
+//        else
+//            builder.append(MAIN_BASE)
+//        for ((_key, v) in value as HashMap<*, *>) {
+//            val internalValueMap: Pair<Any?, ValueTypes> = Pair(v, UNKNOWN)
+//            val vv = v?.let { internalExecute(internalValueMap) }
+//            val newVal = "$_key = $vv"
+//            builder = buildNewLists(newVal, builder, -1)
+//        }
+//        if (type != COLLECTION_WITH_GENERIC_TYPE.name)
+//            builder = buildSessionStructureList(maxLength, builder)
+//        else builder.append(MAIN_BASE)
+//        finalValue = builder.toString()
+//    }
     private fun createGenericMapCollection(valueMap: Pair<Any?, ValueTypes>, maxLength: Int) {
         val value = valueMap.first
         val type = valueMap.second.name
         var builder = StringBuilder()
-        if (type != COLLECTION_WITH_GENERIC_TYPE.name) {
-            builder.append(BREAK_LINE)
-            builder = buildSessionStructureList(maxLength, null)
-        }
-        else builder.append(MAIN_BASE)
+
         for ((_key, v) in value as HashMap<*, *>) {
             val internalValueMap: Pair<Any?, ValueTypes> = Pair(v, UNKNOWN)
             val vv = v?.let { internalExecute(internalValueMap) }
             val newVal = "$_key = $vv"
             builder = buildNewLists(newVal, builder, -1)
         }
+        if (type != COLLECTION_WITH_GENERIC_TYPE.name) {
+            builder.append(BREAK_LINE)
+            builder = buildSessionStructureList(maxLength, null)
+        }
+        else {
+            builder = buildSessionWrapper(builder, configModel.blockLength)
+    //            builder.append(MAIN_BASE)
+    //            builder.append(BLANK_SPACE)
+        }
         if (type != COLLECTION_WITH_GENERIC_TYPE.name)
             builder = buildSessionStructureList(maxLength, builder)
-        else builder.append(MAIN_BASE)
+//        else builder.append(MAIN_BASE)
         finalValue = builder.toString()
     }
 

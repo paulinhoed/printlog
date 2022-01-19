@@ -16,6 +16,7 @@ import com.paulo.android.printloglibrary.constants.PrintLogConstants.HASHTAG
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.HOURS
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.KEY
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.LINE
+import com.paulo.android.printloglibrary.constants.PrintLogConstants.MAIN_BASE
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.MILI_SECONDS
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.MINUTES
 import com.paulo.android.printloglibrary.constants.PrintLogConstants.OPEN_KEYS
@@ -191,6 +192,24 @@ fun buildSessionBlock(text: String? = null): StringBuilder {
         builder.append(CLOSE_KEYS)
     }
     return builder
+}
+
+fun buildSessionWrapper(builder: StringBuilder, blockLength: Int): StringBuilder {
+    val thisBuilder = StringBuilder()
+    var newBase = ""
+    for (i in 0..blockLength-3) {
+        newBase += if (i == 0)
+            MAIN_BASE
+        else if(i == blockLength-3)
+            BASE_1
+        else BASE_HIFEN_SYMBOL
+    }
+    thisBuilder.append(BREAK_LINE)
+    thisBuilder.append(newBase)
+    thisBuilder.append(BREAK_LINE)
+    thisBuilder.append(builder)
+    thisBuilder.append(newBase)
+    return thisBuilder
 }
 
 fun buildSessionStructureList(maxLength: Int, builder: StringBuilder?): StringBuilder {
